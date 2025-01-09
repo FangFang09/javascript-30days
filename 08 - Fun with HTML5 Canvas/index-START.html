@@ -1,20 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>HTML5 Canvas</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-</script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      const canvas = document.querySelector("#draw");
+      // reander context
+      const ctx = canvas.getContext("2d");
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+      // 繪圖前先調整畫布大小
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-</body>
+      // 樣式設定
+      ctx.strokeStyle = "#BADASS";
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.lineWidth = 15; // 調整畫筆的粗細
+      ctx.globalCompositeOperation = "multiply";
+
+      let isDrawing = false;
+      let lastX = 0; // 設定X軸
+      let lastY = 0; // 設定Y軸
+      let hue = 0; // 色相預設為0
+      let direction = true; //用來判斷畫筆要變寬還是變細
+
+      function draw(e) {
+        if (!isDrawing) return; // 意思是isDrawing 為 true表示滑鼠未按下
+        console.log(e);
+        ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+        ctx.beginPath();
+        // 開始
+        ctx.moveTo(lastX, lastY);
+        // go to
+        ctx.lineTo(e.offsetX, e.offsetY);
+
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+
+        hue++; // 色相增加
+        if (hue >= 360) {
+          hue = 0; // 重置為0，讓顏色都在360以內跑
+        }
+
+        // 畫筆粗細動態調整
+        if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+          direction = !direction;
+        }
+        if (direction) {
+          ctx.lineWidth++;
+        } else {
+          ctx.lineWidth--;
+        }
+      }
+
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY]; // 滑鼠從當前位置
+      });
+      canvas.addEventListener("mouseup", () => (isDrawing = false));
+      canvas.addEventListener("mouseout", () => (isDrawing = false));
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>
