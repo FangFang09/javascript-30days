@@ -7,6 +7,19 @@
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
-    <script></script>
+    <script>
+      const pressed = [];
+      const secretCode = "fang";
+
+      window.addEventListener("keyup", (e) => {
+        pressed.push(e.key);
+        // 用來設計pressed的陣列長度都不會超過secretCode的長度
+        pressed.splice(
+          -secretCode.length - 1,
+          pressed.length - secretCode.length
+        );
+        if (pressed.join("").includes(secretCode)) cornify_add();
+      });
+    </script>
   </body>
 </html>
