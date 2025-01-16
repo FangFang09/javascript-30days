@@ -1,57 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS Reference VS Copy</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Reference VS Copy</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <script>
+      // start with strings, numbers and booleans
+      let age = 100;
+      let age2 = age;
+      console.log(age, age2); // 100 100
+      age = 200;
+      console.log(age, age2); // 200 100
 
-  <script>
-    // start with strings, numbers and booleans
+      let name = "fang";
+      let name2 = name;
+      console.log(name, name2); // fang fang
 
-    // Let's say we have an array
-    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+      name = "Vicky";
+      console.log(name, name2); // Vicky fang
 
-    // and we want to make a copy of it.
+      // Let's say we have an array
+      const players = ["Wes", "Sarah", "Ryan", "Poppy"];
+      const result = players.slice();
+      console.log(result);
+      result[3] = "Vicky";
+      console.log(players, result);
 
-    // You might think we can just do something like this:
+      const copyArray = [].concat(players);
 
-    // however what happens when we update that array?
+      const result2 = [...players];
 
-    // now here is the problem!
+      const result3 = Array.from(players);
 
-    // oh no - we have edited the original array too!
+      // and we want to make a copy of it.
 
-    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+      // You might think we can just do something like this:
 
-    // So, how do we fix this? We take a copy instead!
+      // however what happens when we update that array?
 
-    // one way
+      // now here is the problem!
 
-    // or create a new array and concat the old one in
+      // oh no - we have edited the original array too!
 
-    // or use the new ES6 Spread
+      // Why? It's because that is an array reference, not an array copy. They both point to the same array!
 
-    // now when we update it, the original one isn't changed
+      // So, how do we fix this? We take a copy instead!
 
-    // The same thing goes for objects, let's say we have a person object
+      // one way
 
-    // with Objects
-    const person = {
-      name: 'Wes Bos',
-      age: 80
-    };
+      // or create a new array and concat the old one in
 
-    // and think we make a copy:
+      // or use the new ES6 Spread
 
-    // how do we take a copy instead?
+      // now when we update it, the original one isn't changed
 
-    // We will hopefully soon see the object ...spread
+      // The same thing goes for objects, let's say we have a person object
 
-    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+      // with Objects
+      const person = {
+        name: "Wes Bos",
+        age: 80,
+      };
 
-  </script>
+      // and think we make a copy:
+      // const person2 = person;
+      // person2.address = "Tainan";
+      // console.log(person2); // {name: 'Wes Bos', age: 80, address: 'Tainan'}
 
-</body>
+      const answer = Object.assign({}, person, { address: "Tainan" });
+      console.log(answer); // {name: 'Wes Bos', age: 80, address: 'Tainan'}
+      console.log(person); // {name: 'Wes Bos', age: 80}
+      // how do we take a copy instead?
+
+      // We will hopefully soon see the object ...spread
+
+      // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+      const family = {
+        parents: {
+          dad: "David",
+          mom: "Esther",
+        },
+        country: "Israel",
+        familyNumber: 2,
+      };
+
+      // shallow copy
+      const dev = Object.assign({}, family);
+      dev.parents.mom = "Maria";
+      console.log(family);
+      console.log(dev);
+
+      // deep copy
+      const dev2 = JSON.parse(JSON.stringify(family));
+      console.log(dev2);
+      dev2.parents.dad = "Peter";
+      console.log(family);
+      console.log(dev2);
+    </script>
+  </body>
 </html>
